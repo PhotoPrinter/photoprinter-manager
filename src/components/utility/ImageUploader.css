@@ -1,0 +1,12 @@
+.add-image-cta {
+  background-color: #e3e3e3;
+  height: 100%;
+}
+
+.add-image-cta:hover {
+  cursor: pointer;
+}
+
+.image:hover {
+  cursor: pointer;
+}
