@@ -10,17 +10,15 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
-  CardMedia,
-  DialogActions,
-  Button
+  CardMedia
 } from "@material-ui/core";
 import CancelIcon from "@material-ui/icons/Cancel";
 
 import "./ImageUploader.css";
-import { Selector } from "./Forms";
+import { Selector } from "../Forms";
 
 export default function ImageUploader(props) {
-  const [images, setImages] = React.useState([]);
+  const [images, setImages] = React.useState(props.images ?? []);
   const [editingImage, setEditingImage] = React.useState(-1);
 
   const onChange = (imageList, addUpdateIndex) => {
@@ -36,36 +34,50 @@ export default function ImageUploader(props) {
     );
   };
 
+  React.useEffect(() => {
+    if (props.images) {
+      setImages(props.images);
+    }
+  }, [props.images]);
+
   return (
     <div>
       <ImageUploading multiple value={images} onChange={onChange} maxNumber={50} dataURLKey="data_url">
         {({ imageList, onImageUpload, onImageRemove }) => (
           <div>
-            <ImageList rowHeight={180} style={{ width: "100%" }}>
+            <ImageList rowHeight={180} style={{ width: "100%" }} cols={3}>
               {imageList.map((image, index) => (
-                <ImageListItem key={image.file.name} className="image" onClick={() => setEditingImage(index)}>
-                  <img src={image["data_url"]} alt={image.file.name} />
+                <ImageListItem key={image.file.name} className="image">
+                  <img
+                    src={image["data_url"]}
+                    alt={image.file.name}
+                    onClick={() => !props.notEditable && setEditingImage(index)}
+                  />
                   <ImageListItemBar
                     title={image.file.name}
                     subtitle={`${image?.paperType}, ${image?.size}`}
                     actionIcon={
-                      <IconButton onClick={() => onImageRemove(index)}>
-                        <CancelIcon style={{ color: "#ffffff" }} />
-                      </IconButton>
+                      !props.notEditable && (
+                        <IconButton onClick={(e) => onImageRemove(index)}>
+                          <CancelIcon style={{ color: "#ffffff" }} />
+                        </IconButton>
+                      )
                     }
                   />
                 </ImageListItem>
               ))}
-              <ImageListItem>
-                <Grid
-                  container
-                  justifyContent="center"
-                  alignItems="center"
-                  onClick={onImageUpload}
-                  className="add-image-cta">
-                  <Typography variant="h6">Click to add more items</Typography>
-                </Grid>
-              </ImageListItem>
+              {props.allowAdd && !props.notEditable && (
+                <ImageListItem>
+                  <Grid
+                    container
+                    justifyContent="center"
+                    alignItems="center"
+                    onClick={onImageUpload}
+                    className="add-image-cta">
+                    <Typography variant="h6">Click to add more items</Typography>
+                  </Grid>
+                </ImageListItem>
+              )}
             </ImageList>
           </div>
         )}
