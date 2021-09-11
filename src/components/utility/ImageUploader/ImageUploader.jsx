@@ -10,9 +10,11 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
-  CardMedia
+  CardMedia,
+  Button
 } from "@material-ui/core";
-import CancelIcon from "@material-ui/icons/Cancel";
+import GetAppIcon from '@material-ui/icons/GetApp';
+import { saveAs } from 'file-saver'
 
 import "./ImageUploader.css";
 import { Selector } from "../Forms";
@@ -42,12 +44,13 @@ export default function ImageUploader(props) {
 
   return (
     <div>
+      <Button variant="contained" color="primary" style={{marginBottom: 20, marginTop: 10}} onClick={() => images?.forEach && images.forEach((img) => saveAs(img["data_url"], img.file.name))}>Download all</Button>
       <ImageUploading multiple value={images} onChange={onChange} maxNumber={50} dataURLKey="data_url">
-        {({ imageList, onImageUpload, onImageRemove }) => (
+        {({ imageList, onImageUpload }) => (
           <div>
             <ImageList rowHeight={180} style={{ width: "100%" }} cols={3}>
               {imageList.map((image, index) => (
-                <ImageListItem key={image.file.name} className="image">
+                <ImageListItem key={image.file.name}>
                   <img
                     src={image["data_url"]}
                     alt={image.file.name}
@@ -57,27 +60,13 @@ export default function ImageUploader(props) {
                     title={image.file.name}
                     subtitle={`${image?.paperType}, ${image?.size}`}
                     actionIcon={
-                      !props.notEditable && (
-                        <IconButton onClick={(e) => onImageRemove(index)}>
-                          <CancelIcon style={{ color: "#ffffff" }} />
+                        <IconButton onClick={(e) => saveAs(image["data_url"], image.file.name)}>
+                          <GetAppIcon style={{ color: "#ffffff" }} />
                         </IconButton>
-                      )
                     }
                   />
                 </ImageListItem>
               ))}
-              {props.allowAdd && !props.notEditable && (
-                <ImageListItem>
-                  <Grid
-                    container
-                    justifyContent="center"
-                    alignItems="center"
-                    onClick={onImageUpload}
-                    className="add-image-cta">
-                    <Typography variant="h6">Click to add more items</Typography>
-                  </Grid>
-                </ImageListItem>
-              )}
             </ImageList>
           </div>
         )}

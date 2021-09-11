@@ -1,6 +1,5 @@
 import React from "react";
 import { Switch, Route, useHistory } from "react-router-dom";
-import NewOrder from "./components/NewOrder/NewOrder";
 import Orders from "./components/Orders/Orders";
 
 import "./App.css";
@@ -16,9 +15,6 @@ function App() {
     <React.Fragment>
       <Navbar />
       <Switch>
-        <Route path="/neworder">
-          <NewOrder />
-        </Route>
         <Route path="/orders">
           <Orders />
         </Route>
@@ -32,13 +28,6 @@ function App() {
           <Container maxWidth="md" style={{ marginTop: 30 }}>
             <Typography variant="h5">Welcome to PhotoPrinter</Typography>
             <div style={{ display: "flex", flexDirection: "column" }}>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => history.push("/neworder")}
-                style={{ marginBottom: 15 }}>
-                Create a new order
-              </Button>
               <Button
                 variant="contained"
                 color="primary"

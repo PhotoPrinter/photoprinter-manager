@@ -1,5 +1,5 @@
 {
-  "name": "photoprinter-customer",
+  "name": "photoprinter-printer",
   "version": "0.1.0",
   "private": true,
   "homepage": "https://bfkwong.github.io/printr-cust",
@@ -11,6 +11,7 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+    "file-saver": "^2.0.5",
     "gh-pages": "^3.2.3",
     "material-table": "^1.69.3",
     "react": "^17.0.2",

@@ -1,12 +1,13 @@
 import React from "react";
 import { useParams } from "react-router";
-import { Grid, Container, Typography } from "@material-ui/core";
+import { Grid, Container, Typography, Link } from "@material-ui/core";
 import CancelIcon from "@material-ui/icons/Cancel";
 import LocalShippingIcon from "@material-ui/icons/LocalShipping";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import HourglassFullRoundedIcon from "@material-ui/icons/HourglassFullRounded";
 import Pricing from "../utility/Pricing";
 import ImageUploader from "../utility/ImageUploader/ImageUploader";
+import { Selector } from "../utility/Forms";
 
 const mockData = {
   237651: {
@@ -43,6 +44,8 @@ export default function Order(props) {
   let { orderId } = useParams();
   const [orderInfo, setOrderInfo] = React.useState({});
 
+  const [orderStatus, setOrderStatus] = React.useState("processing");
+
   React.useEffect(() => {
     setOrderInfo({ ...mockData[orderId], images });
   }, [orderId]);
@@ -52,21 +55,48 @@ export default function Order(props) {
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <Grid container>
-            <Grid item xs>
+            <Grid item xs={12}>
               <Typography variant="h5">
                 {orderInfo.name} (#{orderId})
               </Typography>
             </Grid>
-            <Grid item>{statusMapper[orderInfo.status]}</Grid>
             {orderInfo.description && (
               <Grid item xs={12}>
                 <Typography variant="subtitle1">{orderInfo.description}</Typography>
               </Grid>
             )}
+            <Grid item xs={12} sm={4} style={{marginTop: 20}}>
+              <Selector label="Order status"
+                value={orderStatus}
+                options={[
+                  { value: "processing", label: <Processing /> },
+                  { value: "shipped", label: <Shipped /> },
+                  { value: "delivered", label: <Delivered /> },
+                ]}
+                onChange={(e) => setOrderStatus(e.target.value)}
+              />
+            </Grid>
           </Grid>
         </Grid>
         <Grid item xs={12}>
-          <Typography variant="h6">Your master pieces</Typography>
+          <Typography variant="h6">Some information</Typography>
+          <Grid container>
+            <Grid item xs={12} sm={6}>
+              <Typography variant="subtitle1"><b>Manager</b></Typography>
+              <Typography variant="subtitle2">Person Name</Typography>
+              <Typography variant="subtitle2"><Link href="mailto:person.name@gmail.com">person.name@gmail.com</Link></Typography>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Typography variant="subtitle1"><b>Customer</b></Typography>
+              <Typography variant="subtitle2">Person Name</Typography>
+              <Typography variant="subtitle2"><Link href="mailto:person.name@gmail.com">person.name@gmail.com</Link></Typography>
+              <Typography variant="subtitle2">1500 Berries Ave<br/>San Jose, CA 95129</Typography>
+
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item xs={12}>
+          <Typography variant="h6">Photos to print</Typography>
           <ImageUploader
             images={orderInfo.images}
             allowAdd
@@ -87,7 +117,7 @@ function Cancelled() {
   return (
     <div style={{ display: "flex", alignItems: "center", color: "#bd0000" }}>
       <CancelIcon style={{ marginRight: 5 }} />
-      <Typography variant="h6">Cancelled</Typography>
+      <Typography variant="subtitle1">Cancelled</Typography>
     </div>
   );
 }
@@ -96,7 +126,7 @@ function Shipped() {
   return (
     <div style={{ display: "flex", alignItems: "center", color: "#0081bd" }}>
       <LocalShippingIcon style={{ marginRight: 5 }} />
-      <Typography variant="h6">Shipped</Typography>
+      <Typography variant="subtitle1">Shipped</Typography>
     </div>
   );
 }
@@ -105,7 +135,7 @@ function Delivered() {
   return (
     <div style={{ display: "flex", alignItems: "center", color: "#00bd06" }}>
       <CheckCircleIcon style={{ marginRight: 5 }} />
-      <Typography variant="h6">Delivered</Typography>
+      <Typography variant="subtitle1">Delivered</Typography>
     </div>
   );
 }
@@ -114,7 +144,7 @@ function Processing() {
   return (
     <div style={{ display: "flex", alignItems: "center", color: "#e08a00" }}>
       <HourglassFullRoundedIcon style={{ marginRight: 5 }} />
-      <Typography variant="h6">Processing</Typography>
+      <Typography variant="subtitle1">Processing</Typography>
     </div>
   );
 }
